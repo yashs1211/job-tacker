@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Tracker</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-100 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-indigo-600 shadow-lg">
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <h1 class="text-2xl font-bold text-white">Shared Job Tracker</h1>
+
+        <div class="text-white font-medium">Yash & Suchi</div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Welcome Section -->
+      <section class="mb-8">
+        <h2 class="text-3xl font-bold text-slate-800">
+          Job Application Dashboard
+        </h2>
+
+        <p class="text-slate-500 mt-2">
+          Track and manage all job applications in one place.
+        </p>
+      </section>
+
+      <!-- Stats Cards -->
+      <section class="grid md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-slate-500 text-sm">Total Jobs</h3>
+          <p id="totalJobs" class="text-3xl font-bold text-indigo-600 mt-2">
+            0
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-slate-500 text-sm">Applied Jobs</h3>
+          <p id="appliedJobs" class="text-3xl font-bold text-green-600 mt-2">
+            0
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-slate-500 text-sm">Pending Jobs</h3>
+          <p id="pendingJobs" class="text-3xl font-bold text-orange-500 mt-2">
+            0
+          </p>
+        </div>
+      </section>
+
+      <!-- Add Job Button -->
+      <section class="mb-6">
+        <button
+          id="addJobBtn"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300"
+        >
+          + Add New Job
+        </button>
+      </section>
+
+      <!-- Job Table -->
+      <section class="bg-white rounded-xl shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="text-left px-6 py-4">Company</th>
+                <th class="text-left px-6 py-4">Role</th>
+                <th class="text-left px-6 py-4">Added By</th>
+                <th class="text-left px-6 py-4">Resume</th>
+                <th class="text-left px-6 py-4">Status</th>
+                <th class="text-left px-6 py-4">Job Link</th>
+                <th class="text-left px-6 py-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="jobTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <div
+      id="jobModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center"
+    >
+      <div class="bg-white w-full max-w-lg rounded-xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-2xl font-bold">Add New Job</h2>
+
+          <button id="closeModal" class="text-2xl">×</button>
+        </div>
+        <form id="jobForm" class="space-y-4">
+          <input
+            type="text"
+            id="company"
+            placeholder="Company Name"
+            class="w-full border p-3 rounded-lg"
+          />
+
+          <input
+            type="text"
+            id="role"
+            placeholder="Job Role"
+            class="w-full border p-3 rounded-lg"
+          />
+
+          <input
+            type="url"
+            id="jobLink"
+            placeholder="Job Link"
+            class="w-full border p-3 rounded-lg"
+          />
+
+          <select id="addedBy" class="w-full border p-3 rounded-lg">
+            <option value="Yash">Yash</option>
+            <option value="Suchi">Suchi</option>
+          </select>
+
+          <select id="status" class="w-full border p-3 rounded-lg">
+            <option value="Pending">To Be Apply</option>
+            <option value="Applied">Applied</option>
+          </select>
+
+          <textarea
+            id="notes"
+            placeholder="Additional Notes"
+            rows="4"
+            class="w-full border p-3 rounded-lg resize-none"
+          ></textarea>
+          <div>
+            <label class="block mb-2 font-medium"> Upload Resume </label>
+
+            <input
+              type="file"
+              id="resume"
+              accept=".pdf,.doc,.docx"
+              class="w-full border p-3 rounded-lg"
+            />
+          </div>
+          <button
+            id="saveJobBtn"
+            type="submit"
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg"
+          >
+            Save Job
+          </button>
+        </form>
+      </div>
+    </div>
+    <div
+      id="viewModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center"
+    >
+      <div class="bg-white w-full max-w-xl rounded-xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-2xl font-bold">Job Details</h2>
+
+          <button id="closeViewModal" class="text-2xl">×</button>
+        </div>
+
+        <div id="jobDetails" class="space-y-3"></div>
+      </div>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
