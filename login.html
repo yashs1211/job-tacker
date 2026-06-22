@@ -1,44 +1,94 @@
-<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Shared Job Tracker</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link
       rel="shortcut icon"
       href="/Assets/icon-1main.png"
       type="image/x-icon"
     />
   </head>
-  <body class="bg-slate-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-      <h1 class="text-3xl font-bold text-center mb-6">Shared Job Tracker</h1>
 
-      <form id="loginForm" class="space-y-4">
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          class="w-full border p-3 rounded-lg"
-          required
-        />
+  <body
+    class="min-h-screen bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 flex items-center justify-center overflow-hidden relative"
+  >
+    <!-- Big Background Logo -->
+    <div
+      class="absolute inset-0 flex items-center justify-center pointer-events-none"
+    >
+      <img
+        src="/Assets/icon-1main.png"
+        alt="Background Logo"
+        class="w-[500px] md:w-[900px] opacity-30"
+      />
+    </div>
 
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          class="w-full border p-3 rounded-lg"
-          required
-        />
+    <!-- Decorative Blur -->
+    <div
+      class="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"
+    ></div>
+
+    <div
+      class="absolute bottom-0 right-0 w-96 h-96 bg-pink-400/10 rounded-full blur-3xl"
+    ></div>
+
+    <!-- Login Card -->
+    <div
+      class="relative z-10 w-[90%] max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-8"
+    >
+      <!-- Logo -->
+      <div class="flex justify-center mb-4">
+        <img src="/Assets/icon-1main.png" alt="Logo" class="w-20 h-20" />
+      </div>
+
+      <h1 class="text-3xl font-bold text-center text-white">
+        Shared Job Tracker
+      </h1>
+
+      <p class="text-center text-white/80 mt-2 mb-8">Welcome Back 👋</p>
+
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label class="block text-white/90 mb-2 text-sm">
+            Email Address
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            class="w-full bg-white/15 border border-white/20 text-white placeholder:text-white/50 p-3 rounded-xl outline-none focus:border-white/50"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-white/90 mb-2 text-sm"> Password </label>
+
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            class="w-full bg-white/15 border border-white/20 text-white placeholder:text-white/50 p-3 rounded-xl outline-none focus:border-white/50"
+            required
+          />
+        </div>
 
         <button
           type="submit"
-          class="w-full bg-indigo-600 text-white py-3 rounded-lg"
+          class="w-full bg-white text-indigo-700 font-semibold py-3 rounded-xl hover:scale-[1.02] transition duration-300 shadow-lg"
         >
-          Login
+          Sign In →
         </button>
       </form>
+
+      <div class="mt-8 text-center text-sm text-white/70">
+        Powered by Firebase & Vercel
+      </div>
     </div>
 
     <script type="module" src="./login.js"></script>

@@ -12,20 +12,22 @@ import {
 } from "./firebase.js";
 console.log("Firebase Connected");
 console.log(db);
+const userEmailElement = document.getElementById("userEmail");
+
+const logoutBtn = document.getElementById("logoutBtn");
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "./login.html";
     return;
   }
 
+  currentUser = user;
+
   userEmailElement.textContent = user.email;
 
   console.log("UID:", user.uid);
   console.log("EMAIL:", user.email);
 });
-const userEmailElement = document.getElementById("userEmail");
-
-const logoutBtn = document.getElementById("logoutBtn");
 // Modal Elements
 const addJobBtn = document.getElementById("addJobBtn");
 const jobModal = document.getElementById("jobModal");
@@ -49,6 +51,7 @@ const resumeInput = document.getElementById("resume");
 const saveJobBtn = document.getElementById("saveJobBtn");
 // Jobs Array
 let jobs = [];
+let currentUser = null;
 const jobsCollection = collection(db, "jobs");
 async function loadJobsFromFirebase() {
   try {
@@ -95,15 +98,22 @@ async function deleteJobFromFirebase(jobId) {
 }
 async function updateJobStatus(jobId, newStatus) {
   try {
+    const job = jobs.find((j) => j.id === jobId);
+
+    const updatedStatuses = {
+      ...(job.statuses || {}),
+      [currentUser.uid]: newStatus,
+    };
+
     const jobRef = doc(db, "jobs", jobId);
 
     await updateDoc(jobRef, {
-      status: newStatus,
+      statuses: updatedStatuses,
     });
 
     await loadJobsFromFirebase();
 
-    console.log("Status Updated");
+    console.log("User Status Updated");
   } catch (error) {
     console.error(error);
   }
@@ -152,8 +162,10 @@ jobForm.addEventListener("submit", (e) => {
     role,
     jobLink,
     addedBy,
-    status,
     notes,
+    statuses: {
+      [currentUser.uid]: status,
+    },
     resumeName: resume ? resume.name : "No Resume",
     resumeUrl: resume ? URL.createObjectURL(resume) : "",
   };
@@ -186,6 +198,9 @@ function renderJobs() {
   jobTableBody.innerHTML = "";
 
   jobs.forEach((job, index) => {
+    const userStatus =
+      job.statuses?.[currentUser?.uid] || job.status || "Pending";
+
     const row = document.createElement("tr");
 
     row.className = "border-t text-sm";
@@ -216,11 +231,11 @@ function renderJobs() {
 
       <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
         <span class="${
-          job.status === "Applied"
+          userStatus === "Applied"
             ? "bg-green-100 text-green-700"
             : "bg-orange-100 text-orange-600"
         } px-3 py-1 rounded-full text-sm font-medium">
-          ${job.status}
+          ${userStatus}
         </span>
       </td>
 
@@ -273,8 +288,12 @@ function renderJobs() {
 function updateDashboard() {
   console.log("Dashboard Running");
   const totalJobs = jobs.length;
-  const appliedJobs = jobs.filter((job) => job.status === "Applied").length;
-  const pendingJobs = jobs.filter((job) => job.status === "Pending").length;
+  const appliedJobs = jobs.filter(
+    (job) => job.statuses?.[currentUser?.uid] === "Applied",
+  ).length;
+  const pendingJobs = jobs.filter(
+    (job) => job.statuses?.[currentUser?.uid] === "Pending",
+  ).length;
   totalJobsElement.textContent = totalJobs;
   appliedJobsElement.textContent = appliedJobs;
   pendingJobsElement.textContent = pendingJobs;
@@ -320,7 +339,12 @@ async function deleteJob(index) {
 async function toggleStatus(index) {
   const job = jobs[index];
 
-  const newStatus = job.status === "Pending" ? "Applied" : "Pending";
+  const currentStatus = job.statuses?.[currentUser.uid] || "Pending";
+
+  const newStatus = currentStatus === "Pending" ? "Applied" : "Pending";
+
+  console.log("Current:", currentStatus);
+  console.log("New:", newStatus);
 
   await updateJobStatus(job.id, newStatus);
 }
