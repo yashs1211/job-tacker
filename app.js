@@ -25,9 +25,12 @@ onAuthStateChanged(auth, (user) => {
 
   userEmailElement.textContent = user.email;
 
+  appBody.classList.remove("hidden");
+
   console.log("UID:", user.uid);
   console.log("EMAIL:", user.email);
 });
+const appBody = document.getElementById("appBody");
 // Modal Elements
 const addJobBtn = document.getElementById("addJobBtn");
 const jobModal = document.getElementById("jobModal");
