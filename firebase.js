@@ -4,6 +4,9 @@ import {
   collection,
   addDoc,
   getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyCamR-1zz2m-Cmv6eZeid9go7z0zZ8YDQQ",
@@ -16,5 +19,4 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-export { db, collection, addDoc, getDocs };
+export { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc };

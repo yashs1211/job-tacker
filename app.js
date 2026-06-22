@@ -1,5 +1,12 @@
-import { db, collection, addDoc, getDocs } from "./firebase.js";
-
+import {
+  db,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "./firebase.js";
 console.log("Firebase Connected");
 console.log(db);
 
@@ -25,16 +32,77 @@ const notesInput = document.getElementById("notes");
 const resumeInput = document.getElementById("resume");
 const saveJobBtn = document.getElementById("saveJobBtn");
 // Jobs Array
-
-let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+let jobs = [];
 const jobsCollection = collection(db, "jobs");
+async function loadJobsFromFirebase() {
+  try {
+    const snapshot = await getDocs(jobsCollection);
+
+    jobs = [];
+
+    snapshot.forEach((doc) => {
+      jobs.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    renderJobs();
+    updateDashboard();
+
+    console.log("Jobs Loaded:", jobs);
+  } catch (error) {
+    console.error("Error loading jobs:", error);
+  }
+}
 async function saveJobToFirebase(job) {
   try {
     await addDoc(jobsCollection, job);
 
+    await loadJobsFromFirebase();
+
     console.log("Job saved to Firebase");
   } catch (error) {
     console.error("Firebase Error:", error);
+  }
+}
+async function deleteJobFromFirebase(jobId) {
+  try {
+    await deleteDoc(doc(db, "jobs", jobId));
+
+    await loadJobsFromFirebase();
+
+    console.log("Job deleted");
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function updateJobStatus(jobId, newStatus) {
+  try {
+    const jobRef = doc(db, "jobs", jobId);
+
+    await updateDoc(jobRef, {
+      status: newStatus,
+    });
+
+    await loadJobsFromFirebase();
+
+    console.log("Status Updated");
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function updateJobInFirebase(jobId, updatedJob) {
+  try {
+    const jobRef = doc(db, "jobs", jobId);
+
+    await updateDoc(jobRef, updatedJob);
+
+    await loadJobsFromFirebase();
+
+    console.log("Job Updated");
+  } catch (error) {
+    console.error(error);
   }
 }
 // Open Modal
@@ -74,20 +142,21 @@ jobForm.addEventListener("submit", (e) => {
     resumeUrl: resume ? URL.createObjectURL(resume) : "",
   };
   if (editIndex !== null) {
-    jobs[editIndex] = job;
+    updateJobInFirebase(editJobId, job);
 
     editIndex = null;
+    editJobId = null;
 
     saveJobBtn.textContent = "Save Job";
   } else {
     jobs.push(job);
     saveJobToFirebase(job);
   }
-  localStorage.setItem("jobs", JSON.stringify(jobs));
+  // localStorage.setItem("jobs", JSON.stringify(jobs));
   console.log(jobs);
   renderJobs();
   updateDashboard();
-  saveToLocalStorage();
+  // saveToLocalStorage();
   jobForm.reset();
   jobModal.classList.add("hidden");
   jobModal.classList.remove("flex");
@@ -99,65 +168,89 @@ closeViewModal.addEventListener("click", () => {
 // Render Jobs
 function renderJobs() {
   jobTableBody.innerHTML = "";
+
   jobs.forEach((job, index) => {
     const row = document.createElement("tr");
-    row.className = "border-t";
+
+    row.className = "border-t text-sm";
+
     row.innerHTML = `
-  <td class="px-6 py-4">${job.company}</td>
-  <td class="px-6 py-4">${job.role}</td>
-  <td class="px-6 py-4">${job.addedBy}</td>
-<td class="px-6 py-4">
-  ${
-    job.resumeUrl
-      ? `<a href="${job.resumeUrl}" target="_blank"
-           class="text-blue-600 hover:underline">
-           ${job.resumeName}
-         </a>`
-      : "No Resume"
-  }
-</td>
-  <td class="px-6 py-4">
-    <span class="${
-      job.status === "Applied"
-        ? "bg-green-100 text-green-700"
-        : "bg-orange-100 text-orange-600"
-    } px-3 py-1 rounded-full text-sm font-medium">
-      ${job.status}
-    </span>
-  </td>
-  <td class="px-6 py-4">
-    <a
-      href="${job.jobLink}"
-      target="_blank"
-      class="text-blue-600 hover:underline"
-    >
-      Open
-    </a>
-  </td>
-  <td class="px-6 py-4">
-  <div class="flex flex-col sm:flex-row gap-2">
-    <button onclick="viewJob(${index})"
-      class="text-blue-600 hover:underline">
-      View
-    </button>
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        ${job.company}
+      </td>
 
-    <button onclick="editJob(${index})"
-      class="text-yellow-600 hover:underline">
-      Edit
-    </button>
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        ${job.role}
+      </td>
 
-    <button onclick="toggleStatus(${index})"
-      class="text-green-600 hover:underline">
-      Status
-    </button>
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        ${job.addedBy}
+      </td>
 
-    <button onclick="deleteJob(${index})"
-      class="text-red-600 hover:underline">
-      Delete
-    </button>
-  </div>
-</td>
-`;
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        ${
+          job.resumeUrl
+            ? `<a href="${job.resumeUrl}" target="_blank"
+                 class="text-blue-600 hover:underline">
+                 ${job.resumeName}
+               </a>`
+            : "No Resume"
+        }
+      </td>
+
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        <span class="${
+          job.status === "Applied"
+            ? "bg-green-100 text-green-700"
+            : "bg-orange-100 text-orange-600"
+        } px-3 py-1 rounded-full text-sm font-medium">
+          ${job.status}
+        </span>
+      </td>
+
+      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+        <a
+          href="${job.jobLink}"
+          target="_blank"
+          class="text-blue-600 hover:underline"
+        >
+          Open
+        </a>
+      </td>
+
+      <td class="px-2 sm:px-6 py-3 sm:py-4">
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button
+            onclick="viewJob(${index})"
+            class="text-blue-600 hover:underline"
+          >
+            View
+          </button>
+
+          <button
+            onclick="editJob(${index})"
+            class="text-yellow-600 hover:underline"
+          >
+            Edit
+          </button>
+
+          <button
+            onclick="toggleStatus(${index})"
+            class="text-green-600 hover:underline"
+          >
+            Status
+          </button>
+
+          <button
+            onclick="deleteJob(${index})"
+            class="text-red-600 hover:underline"
+          >
+            Delete
+          </button>
+        </div>
+      </td>
+    `;
+
     jobTableBody.appendChild(row);
   });
 }
@@ -199,25 +292,24 @@ function viewJob(index) {
 function saveToLocalStorage() {
   localStorage.setItem("jobs", JSON.stringify(jobs));
 }
-function deleteJob(index) {
+async function deleteJob(index) {
   const confirmDelete = confirm("Are you sure you want to delete this job?");
+
   if (!confirmDelete) return;
-  jobs.splice(index, 1);
-  renderJobs();
-  updateDashboard();
-  saveToLocalStorage();
-}
-function toggleStatus(index) {
+
   const job = jobs[index];
 
-  job.status = job.status === "Pending" ? "Applied" : "Pending";
+  await deleteJobFromFirebase(job.id);
+}
+async function toggleStatus(index) {
+  const job = jobs[index];
 
-  renderJobs();
-  updateDashboard();
-  saveToLocalStorage();
+  const newStatus = job.status === "Pending" ? "Applied" : "Pending";
+
+  await updateJobStatus(job.id, newStatus);
 }
 let editIndex = null;
-
+let editJobId = null;
 function editJob(index) {
   const job = jobs[index];
 
@@ -229,14 +321,13 @@ function editJob(index) {
   notesInput.value = job.notes;
 
   editIndex = index;
-
+  editJobId = job.id;
   saveJobBtn.textContent = "Update Job";
 
   jobModal.classList.remove("hidden");
   jobModal.classList.add("flex");
 }
-renderJobs();
-updateDashboard();
+loadJobsFromFirebase();
 window.viewJob = viewJob;
 window.editJob = editJob;
 window.toggleStatus = toggleStatus;

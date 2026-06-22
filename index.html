@@ -75,9 +75,9 @@
       </section>
 
       <!-- Job Table -->
-      <section class="bg-white rounded-xl shadow overflow-hidden">
+      <section class="bg-white rounded-xl shadow overflow-hidden w-full">
         <div class="overflow-x-auto">
-          <table class="w-full">
+          <table class="w-full min-w-[900px]">
             <thead class="bg-slate-100">
               <tr>
                 <th class="text-left px-6 py-4">Company</th>
@@ -177,16 +177,32 @@
       </div>
     </div>
     <footer class="mt-10">
-      <div class="max-w-7xl mx-auto px-4 py-6 text-center">
-        <h3 class="text-lg font-semibold text-slate-800">Shared Job Tracker</h3>
+      <div
+        class="max-w-7xl mx-auto px-4 py-6 flex flex-col items-center text-center"
+      >
+        <h3 class="text-lg sm:text-xl font-semibold text-slate-800">
+          Shared Job Tracker
+        </h3>
 
-        <p class="text-slate-500 text-sm mt-2">Built by Yash & Suchi ❤️</p>
-
-        <p class="text-slate-400 text-xs mt-2">
-          Track job applications, resumes, and opportunities together.
+        <p class="text-slate-500 text-sm sm:text-base mt-2">
+          Developed by Yash & Suchi ❤️
         </p>
-
-        <p class="text-slate-400 text-xs mt-3">
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 max-w-md">
+          Track job applications, resumes, and opportunities together using a
+          shared dashboard.
+        </p>
+        <div class="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-4">
+          <a
+            href="https://github.com/yashs1211"
+            target="_blank"
+            class="text-indigo-600 hover:underline"
+          >
+            GitHub
+          </a>
+          <span class="hidden sm:block text-slate-300">|</span>
+          <span class="text-slate-500 text-sm"> Firebase Powered </span>
+        </div>
+        <p class="text-slate-400 text-xs mt-2">
           © 2026 Shared Job Tracker. All Rights Reserved.
         </p>
       </div>
