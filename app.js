@@ -135,23 +135,28 @@ function renderJobs() {
     </a>
   </td>
   <td class="px-6 py-4">
-  <button onclick="viewJob(${index})"
-    class="text-blue-600 hover:underline">
-    View
-  </button>
-  <button onclick="editJob(${index})"
-    class="text-yellow-600 hover:underline">
-    Edit
-  </button>
-  <button onclick="toggleStatus(${index})"
-    class="text-green-600 hover:underline">
-    Status
-  </button>
-  <button onclick="deleteJob(${index})"
-    class="text-red-600 hover:underline">
-    Delete
-  </button>
-  </td>
+  <div class="flex flex-col sm:flex-row gap-2">
+    <button onclick="viewJob(${index})"
+      class="text-blue-600 hover:underline">
+      View
+    </button>
+
+    <button onclick="editJob(${index})"
+      class="text-yellow-600 hover:underline">
+      Edit
+    </button>
+
+    <button onclick="toggleStatus(${index})"
+      class="text-green-600 hover:underline">
+      Status
+    </button>
+
+    <button onclick="deleteJob(${index})"
+      class="text-red-600 hover:underline">
+      Delete
+    </button>
+  </div>
+</td>
 `;
     jobTableBody.appendChild(row);
   });
