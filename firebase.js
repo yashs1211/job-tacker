@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
 import {
   getFirestore,
   collection,
@@ -8,6 +9,14 @@ import {
   updateDoc,
   deleteDoc,
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCamR-1zz2m-Cmv6eZeid9go7z0zZ8YDQQ",
   authDomain: "shared-job-tracker.firebaseapp.com",
@@ -17,6 +26,22 @@ const firebaseConfig = {
   appId: "1:648808614963:web:eb382bb3c36f17135d2746",
   measurementId: "G-MZ7ZX3W82T",
 };
+
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
-export { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc };
+const auth = getAuth(app);
+
+export {
+  db,
+  auth,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+};

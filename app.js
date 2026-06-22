@@ -1,15 +1,31 @@
 import {
   db,
+  auth,
   collection,
   addDoc,
   getDocs,
   doc,
   updateDoc,
   deleteDoc,
+  onAuthStateChanged,
+  signOut,
 } from "./firebase.js";
 console.log("Firebase Connected");
 console.log(db);
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "./login.html";
+    return;
+  }
 
+  userEmailElement.textContent = user.email;
+
+  console.log("UID:", user.uid);
+  console.log("EMAIL:", user.email);
+});
+const userEmailElement = document.getElementById("userEmail");
+
+const logoutBtn = document.getElementById("logoutBtn");
 // Modal Elements
 const addJobBtn = document.getElementById("addJobBtn");
 const jobModal = document.getElementById("jobModal");
@@ -327,6 +343,15 @@ function editJob(index) {
   jobModal.classList.remove("hidden");
   jobModal.classList.add("flex");
 }
+logoutBtn.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+
+    window.location.href = "./login.html";
+  } catch (error) {
+    console.error(error);
+  }
+});
 loadJobsFromFirebase();
 window.viewJob = viewJob;
 window.editJob = editJob;
