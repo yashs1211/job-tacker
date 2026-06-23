@@ -12,7 +12,7 @@
       type="image/x-icon"
     />
   </head>
-  <body class="bg-slate-100 min-h-screen hidden" id="appBody"></body>
+  <body class="bg-slate-100 min-h-screen hidden transition-colors duration-300" id="appBody">
     <!-- Navbar -->
     <nav class="bg-indigo-600 shadow-lg">
       <div
@@ -22,6 +22,12 @@
         <h1 class="text-2xl font-bold text-white">Shared Job Tracker</h1>
 
        <div class="flex items-center gap-4">
+         <button
+    id="themeToggle"
+    class="bg-white/20 text-white px-3 py-2 rounded-lg text-xl"
+  >
+    🌙
+  </button>
   <span
     id="userEmail"
     class="text-white font-medium"
@@ -55,21 +61,21 @@
       <section
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
       >
-        <div class="bg-white p-6 rounded-xl shadow">
+        <div class="card bg-white p-6 rounded-xl shadow">
           <h3 class="text-slate-500 text-sm">Total Jobs</h3>
           <p id="totalJobs" class="text-3xl font-bold text-indigo-600 mt-2">
             0
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow">
+        <div class="card bg-white p-6 rounded-xl shadow">
           <h3 class="text-slate-500 text-sm">Applied Jobs</h3>
           <p id="appliedJobs" class="text-3xl font-bold text-green-600 mt-2">
             0
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow">
+        <div class="card bg-white p-6 rounded-xl shadow">
           <h3 class="text-slate-500 text-sm">Pending Jobs</h3>
           <p id="pendingJobs" class="text-3xl font-bold text-orange-500 mt-2">
             0
@@ -88,18 +94,18 @@
       </section>
 
       <!-- Job Table -->
-      <section class="bg-white rounded-xl shadow overflow-hidden w-full">
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[900px]">
+      <section class="card bg-white rounded-xl shadow overflow-hidden w-full">
+        <div class="  overflow-x-auto">
+          <table class=" w-full min-w-[900px]">
             <thead class="bg-slate-100">
               <tr>
-                <th class="text-left px-6 py-4">Company</th>
-                <th class="text-left px-6 py-4">Role</th>
-                <th class="text-left px-6 py-4">Added By</th>
+                <th class="text-left px-6 py-4 card">Company</th>
+                <th class="text-left px-6 py-4 card">Role</th>
+                <th class="text-left px-6 py-4 card">Added By</th>
                 <!-- <th class="text-left px-6 py-4">Resume</th> -->
-                <th class="text-left px-6 py-4">Status</th>
-                <th class="text-left px-6 py-4">Job Link</th>
-                <th class="text-left px-6 py-4">Actions</th>
+                <th class="text-left px-6 py-4 card">Status</th>
+                <th class="text-left px-6 py-4 card">Job Link</th>
+                <th class="text-left px-6 py-4 card">Actions</th>
               </tr>
             </thead>
             <tbody id="jobTableBody"></tbody>
@@ -111,7 +117,7 @@
       id="jobModal"
       class="fixed inset-0 bg-black/50 hidden items-center justify-center"
     >
-      <div class="bg-white w-[95%] sm:w-full max-w-lg rounded-xl p-4 sm:p-6">
+      <div class="modal-card bg-white w-[95%] sm:w-full max-w-lg rounded-xl p-4 sm:p-6">
         <div class="flex justify-between items-center mb-5">
           <h2 class="text-2xl font-bold">Add New Job</h2>
 
@@ -179,7 +185,7 @@
       id="viewModal"
       class="fixed inset-0 bg-black/50 hidden items-center justify-center"
     >
-      <div class="bg-white w-[95%] sm:w-full max-w-xl rounded-xl p-4 sm:p-6">
+      <div class="modal-card bg-white w-[95%] sm:w-full max-w-xl rounded-xl p-4 sm:p-6">
         <div class="flex justify-between items-center mb-5">
           <h2 class="text-2xl font-bold">Job Details</h2>
 

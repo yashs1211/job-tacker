@@ -52,6 +52,65 @@ const statusInput = document.getElementById("status");
 const notesInput = document.getElementById("notes");
 // const resumeInput = document.getElementById("resume");
 const saveJobBtn = document.getElementById("saveJobBtn");
+// theme toggle
+const themeToggle = document.getElementById("themeToggle");
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  enableDarkMode();
+}
+
+themeToggle.addEventListener("click", () => {
+  if (document.body.classList.contains("dark")) {
+    disableDarkMode();
+  } else {
+    enableDarkMode();
+  }
+});
+
+function enableDarkMode() {
+  document.body.classList.add("dark");
+
+  document.body.classList.remove("bg-slate-100");
+  document.body.classList.add("bg-slate-900");
+
+  document.querySelectorAll(".card").forEach((card) => {
+    card.classList.remove("bg-white");
+    card.classList.add("bg-slate-800", "text-white");
+  });
+
+  document.querySelectorAll(".modal-card").forEach((card) => {
+    card.classList.remove("bg-white");
+    card.classList.add("bg-slate-800", "text-white");
+  });
+
+  themeToggle.textContent = "☀️";
+
+  localStorage.setItem("theme", "dark");
+}
+
+function disableDarkMode() {
+  document.body.classList.remove("dark");
+
+  document.body.classList.remove("bg-slate-900");
+  document.body.classList.add("bg-slate-100");
+
+  document.querySelectorAll(".card").forEach((card) => {
+    card.classList.remove("bg-slate-800", "text-white");
+    card.classList.add("bg-white");
+  });
+
+  document.querySelectorAll(".modal-card").forEach((card) => {
+    card.classList.remove("bg-slate-800", "text-white");
+    card.classList.add("bg-white");
+  });
+
+  themeToggle.textContent = "🌙";
+
+  localStorage.setItem("theme", "light");
+}
+
 // Jobs Array
 let jobs = [];
 let currentUser = null;
