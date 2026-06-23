@@ -50,7 +50,7 @@ const jobLinkInput = document.getElementById("jobLink");
 const addedByInput = document.getElementById("addedBy");
 const statusInput = document.getElementById("status");
 const notesInput = document.getElementById("notes");
-const resumeInput = document.getElementById("resume");
+// const resumeInput = document.getElementById("resume");
 const saveJobBtn = document.getElementById("saveJobBtn");
 // Jobs Array
 let jobs = [];
@@ -155,7 +155,7 @@ jobForm.addEventListener("submit", (e) => {
   const addedBy = addedByInput.value;
   const status = statusInput.value;
   const notes = notesInput.value.trim();
-  const resume = resumeInput.files[0];
+  // const resume = resumeInput.files[0];
   if (!company || !role) {
     alert("Please fill all fields");
     return;
@@ -169,8 +169,8 @@ jobForm.addEventListener("submit", (e) => {
     statuses: {
       [currentUser.uid]: status,
     },
-    resumeName: resume ? resume.name : "No Resume",
-    resumeUrl: resume ? URL.createObjectURL(resume) : "",
+    resumeName: "",
+    resumeUrl: "",
   };
   if (editIndex !== null) {
     updateJobInFirebase(editJobId, job);
@@ -221,16 +221,6 @@ function renderJobs() {
         ${job.addedBy}
       </td>
 
-      <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-        ${
-          job.resumeUrl
-            ? `<a href="${job.resumeUrl}" target="_blank"
-                 class="text-blue-600 hover:underline">
-                 ${job.resumeName}
-               </a>`
-            : "No Resume"
-        }
-      </td>
 
       <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
         <span class="${
@@ -308,7 +298,7 @@ function viewJob(index) {
     <p><strong>Role:</strong> ${job.role}</p>
     <p><strong>Added By:</strong> ${job.addedBy}</p>
     <p><strong>Status:</strong> ${job.status}</p>
-    <p><strong>Resume:</strong> ${job.resumeName}</p>
+    // <p><strong>Resume:</strong> ${job.resumeName}</p>
     <p>
       <strong>Job Link:</strong>
       <a
